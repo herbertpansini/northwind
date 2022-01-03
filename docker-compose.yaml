@@ -1,12 +1,13 @@
 version: '3.5'
 
 services:
-  sqldata:
+  sqlserver:
     image: mcr.microsoft.com/mssql/server:2017-latest
-    environment:
-      - SA_PASSWORD=139875He
-      - MSSQL_DATABASE=Northwind
-      - MSSQL_PID=Express
-      - ACCEPT_EULA=Y
+    user: '0:0'
+    container_name: northwind
     ports:
-      - "5434:1433"
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Password01.
+      MSSQL_PID: Express
