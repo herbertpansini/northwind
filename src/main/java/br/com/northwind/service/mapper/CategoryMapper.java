@@ -1,6 +1,6 @@
-package br.com.northwind.mapper;
+package br.com.northwind.service.mapper;
 
-import br.com.northwind.dto.CategoryDto;
+import br.com.northwind.service.dto.CategoryDto;
 import br.com.northwind.model.Category;
 import org.mapstruct.Mapper;
 

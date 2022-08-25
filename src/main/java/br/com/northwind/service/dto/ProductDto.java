@@ -1,17 +1,14 @@
-package br.com.northwind.dto;
+package br.com.northwind.service.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.io.Serializable;
+
+import javax.persistence.Id;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class ProductDto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class ProductDto {
+    @Id
     private Long id;
     private String name;
     private CategoryDto category;

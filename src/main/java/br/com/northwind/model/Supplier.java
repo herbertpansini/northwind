@@ -17,7 +17,6 @@ import lombok.Data;
 @Table(name = "Suppliers")
 @Data
 public class Supplier implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -26,7 +25,7 @@ public class Supplier implements Serializable {
 	private Long id;
 	
 	@Column(name = "CompanyName", nullable = false)
-	private String name;
+	private String companyName;
 		
 	@Column(name = "ContactName")
 	private String contactName;

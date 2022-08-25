@@ -1,18 +1,14 @@
-package br.com.northwind.dto;
-
-import java.io.Serializable;
+package br.com.northwind.service.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.Id;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class SupplierDto implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
+public class SupplierDto {
+	@Id
 	private Long id;
 	private String name;
 	private String contactName;

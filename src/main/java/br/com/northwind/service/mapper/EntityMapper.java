@@ -1,4 +1,4 @@
-package br.com.northwind.mapper;
+package br.com.northwind.service.mapper;
 
 import java.util.List;
 

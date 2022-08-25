@@ -1,6 +1,6 @@
-package br.com.northwind.mapper;
+package br.com.northwind.service.mapper;
 
-import br.com.northwind.dto.ProductDto;
+import br.com.northwind.service.dto.ProductDto;
 import br.com.northwind.model.Product;
 import org.mapstruct.Mapper;
 
