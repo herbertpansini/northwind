@@ -1,11 +1,13 @@
 package br.com.northwind.controller;
 
-import br.com.northwind.service.dto.CurrentProductDto;
-import br.com.northwind.service.dto.ProductAboveAveragePriceDto;
-import br.com.northwind.service.dto.ProductByCategoryDto;
+import br.com.northwind.service.projection.AlphabeticalListOfProductsProjection;
+import br.com.northwind.service.projection.CurrentProductListProjection;
+import br.com.northwind.service.projection.ProductAboveAveragePriceProjection;
+import br.com.northwind.service.projection.ProductByCategoryProjection;
+import br.com.northwind.service.dto.ProductFilterDto;
+import br.com.northwind.service.projection.ProductSalesFor1997Projection;
+import br.com.northwind.service.projection.TenMostExpensiveProductsProjection;
 import io.micrometer.core.annotation.Timed;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,83 +20,86 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.northwind.service.dto.ProductDto;
 import br.com.northwind.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
-
-	private final Logger log = LoggerFactory.getLogger(ProductController.class);
-
 	private final ProductService productService;
 
 	@GetMapping
 	@Timed
-	public ResponseEntity<Page<ProductDto>> findAll(Pageable pageable) {
-		log.debug("Recuperar uma coleção de produtos : {}", pageable);
-		return ResponseEntity.ok(this.productService.findAll(pageable));
+	public ResponseEntity<Page<ProductDto>> findProductsByFilter(ProductFilterDto productFilterDto, Pageable pageable) {
+		return ResponseEntity.ok(this.productService.findProductsByFilter(productFilterDto, pageable));
 	}
 
 	@GetMapping("{id}")
 	@Timed
-	public ResponseEntity<ProductDto> findById(@PathVariable Long id) {
-		log.debug("Recuperar uma produto : {}", id);
+	public ResponseEntity<ProductDto> findById(@PathVariable long id) {
 		return ResponseEntity.ok(this.productService.findById(id));
 	}
 
 	@GetMapping("/products-above-average-price")
 	@Timed
-	public ResponseEntity<Page<ProductAboveAveragePriceDto>> findProductsAboveAveragePrice(Pageable pageable) {
-		log.debug("Recuperar uma coleção de produtos preço médio : {}", pageable);
+	public ResponseEntity<Page<ProductAboveAveragePriceProjection>> findProductsAboveAveragePrice(Pageable pageable) {
 		return ResponseEntity.ok(this.productService.findProductsAboveAveragePrice(pageable));
 	}
 
 	@GetMapping("/alphabetical-list-of-products")
 	@Timed
-	public ResponseEntity<Page<ProductDto>> findByDiscontinuedIsFalseOrderByName(Pageable pageable) {
-		log.debug("Recuperar uma coleção de produtos por ordem alfabética : {}", pageable);
-		return ResponseEntity.ok(this.productService.findByDiscontinuedIsFalseOrderByName(pageable));
+	public ResponseEntity<Page<AlphabeticalListOfProductsProjection>> findAlphabeticalListOfProducts(Pageable pageable) {
+		return ResponseEntity.ok(this.productService.findAlphabeticalListOfProducts(pageable));
 	}
 
-	@GetMapping("/current-products")
+	@GetMapping("/current-product-list")
 	@Timed
-	public ResponseEntity<Page<CurrentProductDto>> findCurrentProducts(Pageable pageable) {
-		log.debug("Recuperar uma coleção de produtos ativos : {}", pageable);
-		return ResponseEntity.ok(this.productService.findCurrentProducts(pageable));
+	public ResponseEntity<Page<CurrentProductListProjection>> findCurrentProductList(Pageable pageable) {
+		return ResponseEntity.ok(this.productService.findCurrentProductList(pageable));
 	}
 
 	@GetMapping("/products-by-category")
 	@Timed
-	public ResponseEntity<Page<ProductByCategoryDto>> findProductsByCategory(Pageable pageable) {
-		log.debug("Recuperar uma coleção de produtos por categoria : {}", pageable);
+	public ResponseEntity<Page<ProductByCategoryProjection>> findProductsByCategory(Pageable pageable) {
 		return ResponseEntity.ok(this.productService.findProductsByCategory(pageable));
 	}
+
+    @GetMapping("/product-sales-for-1997")
+    @Timed
+    public ResponseEntity<Page<ProductSalesFor1997Projection>> productSalesFor1997(Pageable pageable) {
+        return ResponseEntity.ok(this.productService.productSalesFor1997(pageable));
+    }
+
+    @GetMapping("/ten-most-expensive-products")
+    @Timed
+    public ResponseEntity<List<TenMostExpensiveProductsProjection>> tenMostExpensiveProducts() {
+        return ResponseEntity.ok(this.productService.tenMostExpensiveProducts());
+    }
 
 	@PostMapping
 	@Timed
 	public ResponseEntity<ProductDto> save(@RequestBody ProductDto productDto) {
-		log.debug("Cadastrar um produto : {}", productDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.save(productDto));
 	}
 
 	@PutMapping("{id}")
 	@Timed
-	public ResponseEntity<ProductDto> update(@PathVariable Long id, @RequestBody ProductDto productDto) {
-		log.debug("Alterar um produto : {}", productDto);
+	public ResponseEntity<ProductDto> update(@PathVariable long id, @RequestBody ProductDto productDto) {
 		return ResponseEntity.ok(this.productService.update(id, productDto));
 	}
 
 	@DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
 	@Timed
-	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-		log.debug("Excluir um produto : {}", id);
+	public void deleteById(@PathVariable long id) {
 		this.productService.deleteById(id);
-		return ResponseEntity.noContent().build();
 	}
 }

@@ -1,62 +1,78 @@
 package br.com.northwind.model;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "Suppliers")
-@Data
-public class Supplier implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(of = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Supplier implements BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SupplierID", nullable = false)
-	private Long id;
+	Long id;
 	
 	@Column(name = "CompanyName", nullable = false)
-	private String companyName;
+	String companyName;
 		
 	@Column(name = "ContactName")
-	private String contactName;
+	String contactName;
 	
 	@Column(name = "ContactTitle")
-	private String contactTitle;
+	String contactTitle;
 	
 	@Column(name = "Address")
-	private String address;
+	String address;
 	
 	@Column(name = "City")
-	private String city;
+	String city;
 	
 	@Column(name = "Region")
-	private String region;
+	String region;
 	
 	@Column(name = "PostalCode")
-	private String postalCode;
+	String postalCode;
 	
 	@Column(name = "Country")
-	private String country;
+	String country;
 	
 	@Column(name = "Phone")
-	private String phone;
+	String phone;
 	
 	@Column(name = "Fax")
-	private String fax;
+	String fax;
 	
 	@Column(name = "HomePage")
-	private String homePage;
+	String homePage;
 	
-	@OneToMany(mappedBy = "supplier")
-	private List<Product> products;
+	@JsonIgnoreProperties(value = {"supplier"}, allowSetters = true)
+	@OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	Set<Product> products = new HashSet<>();
 }

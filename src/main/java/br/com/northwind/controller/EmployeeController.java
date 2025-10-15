@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -34,7 +35,7 @@ public class EmployeeController {
 
     @GetMapping("{id}")
     @Timed
-    public ResponseEntity<EmployeeDto> findById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeDto> findById(@PathVariable long id) {
         return ResponseEntity.ok(this.employeeService.findById(id));
     }
 
@@ -46,14 +47,14 @@ public class EmployeeController {
 
     @PutMapping("{id}")
     @Timed
-    public ResponseEntity<EmployeeDto> update(@PathVariable Long id, @Valid @RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> update(@PathVariable long id, @Valid @RequestBody EmployeeDto employeeDto) {
         return ResponseEntity.ok(this.employeeService.update(id, employeeDto));
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Timed
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public void deleteById(@PathVariable long id) {
         this.employeeService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }

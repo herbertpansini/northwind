@@ -1,24 +1,28 @@
 package br.com.northwind.service.dto;
 
+import java.io.Serializable;
+
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Id;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-public class SupplierDto {
-	@Id
-	private Long id;
-	private String name;
-	private String contactName;
-	private String contactTitle;
-	private String address;
-	private String city;
-	private String region;
-	private String postalCode;
-	private String country;
-	private String phone;
-	private String fax;
-	private String homePage;	
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class SupplierDto implements BaseDto, Serializable {
+	private static final long serialVersionUID = 1L;
+
+	Long id;
+	String name;
+	String contactName;
+	String contactTitle;
+	String address;
+	String city;
+	String region;
+	String postalCode;
+	String country;
+	String phone;
+	String fax;
+	String homePage;	
 }

@@ -1,9 +1,8 @@
 package br.com.northwind.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,45 +10,55 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "Products")
-@Data
-public class Product implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(of = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Product implements BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ProductID", nullable = false)
-	private Long id;
+	Long id;
 	
 	@Column(name = "ProductName", nullable = false)
-	private String name;
+	String name;
+
+	@JsonIgnoreProperties(value = "products")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CategoryID", nullable = false)
+	Category category;
+
+	@JsonIgnoreProperties(value = "suppliers")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SupplierID", nullable = false)
+	Supplier supplier;
+
+	String quantityPerUnit;
+
+	Double unitPrice;
+
+	Integer unitsInStock;
+
+	Integer unitsOnOrder;
+
+	Integer reorderLevel;
 	
-	@ManyToOne
-    @JoinColumn(name="CategoryID", nullable = false)
-	private Category category;
-	
-	@ManyToOne
-    @JoinColumn(name="SupplierID", nullable = false)
-	private Supplier supplier;
-	
-	@Column(name = "QuantityPerUnit", nullable = true)
-	private String quantityPerUnit;
-	
-	@Column(name = "UnitPrice", nullable = true)
-	private Double unitPrice;
-		
-	@Column(name = "UnitsInStock", nullable = true)
-	private Integer unitsInStock;
-		
-	@Column(name = "UnitsOnOrder", nullable = true)
-	private Integer unitsOnOrder;
-		
-	@Column(name = "ReorderLevel", nullable = true)
-	private Integer reorderLevel;
-	
-	@Column(name = "Discontinued", nullable = false)
-	private Boolean discontinued;
+	@Column(nullable = false)
+	Boolean discontinued;
 }

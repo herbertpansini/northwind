@@ -1,6 +1,10 @@
 package br.com.northwind.model;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,65 +12,65 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Employees")
-@Data
-public class Employee implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Employee implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EmployeeID", nullable = false)
-    private Long id;
+    Long id;
 
     @Column(name = "LastName", length = 20, nullable = false)
-    private String lastName;
+    String lastName;
 
     @Column(name = "FirstName", length = 10, nullable = false)
-    private String firstName;
+    String firstName;
 
     @Column(name = "Title", length = 30)
-    private String title;
+    String title;
 
     @Column(name = "TitleOfCourtesy", length = 25)
-    private String titleOfCourtesy;
+    String titleOfCourtesy;
 
     @Column(name = "BirthDate")
-    private LocalDateTime birthDate;
+    LocalDateTime birthDate;
 
     @Column(name = "HireDate")
-    private LocalDateTime hireDate;
+    LocalDateTime hireDate;
 
     @Column(name = "Address", length = 60)
-    private String address;
+    String address;
 
     @Column(name = "City", length = 15)
-    private String city;
+    String city;
 
     @Column(name = "Region", length = 15)
-    private String region;
+    String region;
 
     @Column(name = "PostalCode", length = 10)
-    private String postalCode;
+    String postalCode;
 
     @Column(name = "Country", length = 15)
-    private String country;
+    String country;
 
     @Column(name = "HomePhone", length = 24)
-    private String homePhone;
+    String homePhone;
 
     @Column(name = "Extension", length = 4)
-    private String extension;
+    String extension;
 
     @Column(name = "Notes")
-    private String notes;
+    String notes;
 
     @Column(name = "ReportsTo")
-    private Integer reportsTo;
+    Integer reportsTo;
 
     @Column(name = "PhotoPath", length = 255)
-    private String photoPath;
+    String photoPath;
 }

@@ -1,7 +1,8 @@
 package br.com.northwind.controller;
 
-import br.com.northwind.service.dto.CategoryProjection;
-import br.com.northwind.service.dto.CategoryView;
+import br.com.northwind.service.dto.CategoryListDto;
+import br.com.northwind.service.dto.CategoryListItemDto;
+import br.com.northwind.service.projection.CategorySalesFor1997Projection;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.northwind.service.dto.CategoryDto;
 import br.com.northwind.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,64 +31,47 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-
-	private final Logger log = LoggerFactory.getLogger(CategoryController.class);
-		
 	private final CategoryService categoryService;
 	
-	@GetMapping
+	@GetMapping("/search")
 	@Timed
-	public ResponseEntity<Page<CategoryDto>> findAll(Pageable pageable) {
-		log.debug("Recuperar uma coleção de categorias : {}", pageable);
-		return ResponseEntity.ok(this.categoryService.findAll(pageable));
+	public ResponseEntity<Page<CategoryListDto>> findByNameOrDescription(@RequestParam(value = "term", required = false, defaultValue = "") String term, Pageable pageable) {
+		return ResponseEntity.ok(this.categoryService.findByNameOrDescription(term, pageable));
 	}
 
-	@GetMapping("/by-name-or-description")
-	@Timed
-	public ResponseEntity<Page<CategoryDto>> findByNameContainingIgnoreCaseOrderByName(@RequestParam(value = "name", required = false, defaultValue = "") String name, Pageable pageable) {
-		log.debug("Recuperar categorias por nome : {}", name);
-		return ResponseEntity.ok(this.categoryService.findByNameContainingIgnoreCaseOrderByName(name, pageable));
-	}
+    @GetMapping
+    @Timed
+    public ResponseEntity<List<CategoryListItemDto>> findAllByOrderByName() {
+        return ResponseEntity.ok(this.categoryService.findAllByOrderByName());
+    }
 
-	@GetMapping("/all")
-	@Timed
-	public ResponseEntity<List<CategoryProjection>> findBy() {
-		log.debug("Recuperar categorias");
-		return ResponseEntity.ok(this.categoryService.findBy());
-	}
-
-	@GetMapping("/all-by")
-	@Timed
-	public ResponseEntity<List<CategoryView>> findAllBy() {
-		log.debug("Recuperar categorias");
-		return ResponseEntity.ok(this.categoryService.findAllBy());
-	}
+    @GetMapping("/category-sales-for-1997")
+    @Timed
+    public ResponseEntity<Page<CategorySalesFor1997Projection>> categorySalesFor1997(Pageable pageable) {
+        return ResponseEntity.ok(this.categoryService.categorySalesFor1997(pageable));
+    }
 	
 	@GetMapping("{id}")
 	@Timed
-	public ResponseEntity<CategoryDto> findById(@PathVariable Long id) {
-		log.debug("Recuperar uma categoria : {}", id);
+	public ResponseEntity<CategoryDto> findById(@PathVariable long id) {
 		return ResponseEntity.ok(this.categoryService.findById(id));
 	}
 	
 	@PostMapping
 	@Timed
 	public ResponseEntity<CategoryDto> save(@Valid @RequestBody CategoryDto categoryDto) {
-		log.debug("Cadastrar uma categoria : {}", categoryDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.categoryService.save(categoryDto));
 	}
 	
 	@PutMapping("{id}")
 	@Timed
-	public ResponseEntity<CategoryDto> update(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
-		log.debug("Alterar uma categoria : {}", categoryDto);
+	public ResponseEntity<CategoryDto> update(@PathVariable long id, @Valid @RequestBody CategoryDto categoryDto) {
 		return ResponseEntity.ok(this.categoryService.update(id, categoryDto));
 	}
 	
 	@DeleteMapping("{id}")
 	@Timed
-	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-		log.debug("Excluir uma categoria : {}", id);
+	public ResponseEntity<Void> deleteById(@PathVariable long id) {
 		this.categoryService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

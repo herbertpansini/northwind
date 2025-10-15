@@ -1,28 +1,26 @@
 package br.com.northwind.service;
 
 import br.com.northwind.service.dto.CategoryDto;
-import br.com.northwind.service.dto.CategoryProjection;
-import br.com.northwind.service.dto.CategoryView;
+import br.com.northwind.service.dto.CategoryListDto;
+import br.com.northwind.service.dto.CategoryListItemDto;
+import br.com.northwind.service.projection.CategorySalesFor1997Projection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface CategoryService {
+   Page<CategoryListDto> findByNameOrDescription(String term, Pageable pageable);
 
-   Page<CategoryDto> findAll(Pageable pageable);
+    List<CategoryListItemDto> findAllByOrderByName();
 
-   Page<CategoryDto> findByNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
+    Page<CategorySalesFor1997Projection> categorySalesFor1997(Pageable pageable);
 
-   List<CategoryProjection> findBy();
-
-   List<CategoryView> findAllBy();
-   
-   CategoryDto findById(Long id);
+   CategoryDto findById(long id);
    
    CategoryDto save(CategoryDto categoryDto);
    
-   CategoryDto update(Long id, CategoryDto categoryDto);
+   CategoryDto update(long id, CategoryDto categoryDto);
    
-   void deleteById(Long id);
+   void deleteById(long id);
 }

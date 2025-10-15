@@ -1,61 +1,65 @@
 package br.com.northwind.service.dto;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class EmployeeDto {
-    @Id
-    private Long id;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EmployeeDto implements BaseDto, Serializable {
+    private static final long serialVersionUID = 1L;
+    Long id;
 
     @NotEmpty
     @Max(20)
-    private String lastName;
+    String lastName;
 
     @NotEmpty
     @Max(10)
-    private String firstName;
+    String firstName;
 
     @Max(30)
-    private String title;
+    String title;
 
     @Max(25)
-    private String titleOfCourtesy;
+    String titleOfCourtesy;
 
-    private LocalDateTime birthDate;
-    private LocalDateTime hireDate;
+    LocalDateTime birthDate;
+    LocalDateTime hireDate;
 
     @Max(60)
-    private String address;
+    String address;
 
     @Max(15)
-    private String city;
+    String city;
 
     @Max(15)
-    private String region;
+    String region;
 
     @Max(10)
-    private String postalCode;
+    String postalCode;
 
     @Max(15)
-    private String country;
+    String country;
 
     @Max(24)
-    private String homePhone;
+    String homePhone;
 
     @Max(4)
-    private String extension;
+    String extension;
 
-    private String notes;
+    String notes;
 
-    private Integer reportsTo;
+    Integer reportsTo;
 
     @Max(255)
-    private String photoPath;
+    String photoPath;
 }

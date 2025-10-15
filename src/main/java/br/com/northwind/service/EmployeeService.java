@@ -8,11 +8,11 @@ public interface EmployeeService {
 
     Page<EmployeeDto> findAll(Pageable pageable);
 
-    EmployeeDto findById(Long id);
+    EmployeeDto findById(long id);
 
     EmployeeDto save(EmployeeDto employeeDto);
 
-    EmployeeDto update(Long id, EmployeeDto employeeDto);
+    EmployeeDto update(long id, EmployeeDto employeeDto);
 
-    void deleteById(Long id);
+    void deleteById(long id);
 }
