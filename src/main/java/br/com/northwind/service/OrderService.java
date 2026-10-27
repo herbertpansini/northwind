@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
 public interface OrderService {
+    OrderDto save(OrderDto orderDto);
+
     Page<OrderDto> findAll(Pageable pageable);
 
     Page<EmployeeSalesByCountryProjection> findEmployeeSalesByCountry(LocalDateTime beginningDate, LocalDateTime endingDate, Pageable pageable);

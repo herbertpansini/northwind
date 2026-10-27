@@ -6,6 +6,7 @@ import br.com.northwind.service.dto.OrderDto;
 import br.com.northwind.service.mapper.OrderMapper;
 import br.com.northwind.service.projection.EmployeeSalesByCountryProjection;
 import br.com.northwind.service.projection.SalesByYearProjection;
+import br.com.northwind.service.validation.OrderValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,6 +24,14 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderValidation orderValidation;
+
+    @Override
+    public OrderDto save(OrderDto orderDto) {
+        this.orderValidation.validateCreationOrder(orderDto);
+
+        return this.orderMapper.toDto(this.orderRepository.save(this.orderMapper.toEntity(orderDto)));
+    }
 
     @Transactional(readOnly = true)
     @Override
